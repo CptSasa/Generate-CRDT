@@ -1,0 +1,144 @@
+[debug] > Exec(early(addDefaultCommands), None, None)
+[debug] > Exec(addDefaultCommands, None, None)
+[debug] > Exec(early(initialize), None, None)
+[debug] > Exec(initialize, None, None)
+[debug] > Exec(early(addPluginSbtFile="""C:\Users\Salim\AppData\Local\Temp\idea.sbt"""), None, None)
+[debug] > Exec(addPluginSbtFile="""C:\Users\Salim\AppData\Local\Temp\idea.sbt""", None, None)
+[debug] > Exec(boot, None, None)
+[debug] > Exec(writeSbtVersion, None, None)
+[debug] > Exec(reload, None, None)
+[debug] > Exec(sbtStashOnFailure, None, None)
+[debug] > Exec(onFailure loadFailed, None, None)
+[debug] > Exec(loadp, None, None)
+[info] welcome to sbt 1.6.2 (Oracle Corporation Java 9)
+[debug]       Load.loadUnit: plugins took 534.491ms
+[debug]       Load.loadUnit: defsScala took 1.4327ms
+[debug] [Loading] Scanning directory C:\Users\Salim\.sbt\1.0\plugins
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\Salim\.sbt\1.0\plugins, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 48.5179 ms
+[debug]           Load.resolveProject(global-plugins) took 124.2516ms
+[debug]         Load.loadTransitive: finalizeProject(Project(id global-plugins, base: C:\Users\Salim\.sbt\1.0\plugins, plugins: List(<none>))) took 310.4787ms
+[debug] [Loading] Done in C:\Users\Salim\.sbt\1.0\plugins, returning: (global-plugins)
+[debug]       Load.loadUnit: loadedProjectsRaw took 411.546ms
+[debug]       Load.loadUnit: cleanEvalClasses took 0.7727ms
+[debug]     Load.loadUnit(file:/C:/Users/Salim/.sbt/1.0/plugins/, ...) took 1018.5937ms
+[debug]   Load.apply: load took 2186.5264ms
+[debug]   Load.apply: resolveProjects took 16.5339ms
+[debug]   Load.apply: finalTransforms took 635.432ms
+[debug]   Load.apply: config.delegates took 23.377ms
+[debug]   Load.apply: Def.make(settings)... took 2369.5193ms
+[debug]   Load.apply: structureIndex took 819.5565ms
+[debug]   Load.apply: mkStreams took 4.2202ms
+[info] loading global plugins from C:\Users\Salim\.sbt\1.0\plugins
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Load.defaultLoad until apply took 14414.4876ms
+[debug]           Load.loadUnit: plugins took 91.0843ms
+[debug]           Load.loadUnit: defsScala took 0.0076ms
+[debug] [Loading] Scanning directory C:\Users\Salim\Documents\crdt\CRDT-Test-master\project
+[debug]             Load.loadUnit: mkEval took 12.0983ms
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\Salim\Documents\crdt\CRDT-Test-master\project, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 30.6307 ms
+[info] loading settings for project crdt-test-master-build from idea.sbt ...
+[debug]               Load.resolveProject(crdt-test-master-build) took 48.6001ms
+[debug]             Load.loadTransitive: finalizeProject(Project(id crdt-test-master-build, base: C:\Users\Salim\Documents\crdt\CRDT-Test-master\project, plugins: List(<none>))) took 88.8134ms
+[debug] [Loading] Done in C:\Users\Salim\Documents\crdt\CRDT-Test-master\project, returning: (crdt-test-master-build)
+[debug]           Load.loadUnit: loadedProjectsRaw took 521.5562ms
+[debug]           Load.loadUnit: cleanEvalClasses took 42.3399ms
+[debug]         Load.loadUnit(file:/C:/Users/Salim/Documents/crdt/CRDT-Test-master/project/, ...) took 658.0659ms
+[debug]       Load.apply: load took 661.102ms
+[debug]       Load.apply: resolveProjects took 0.1888ms
+[debug]       Load.apply: finalTransforms took 184.8987ms
+[debug]       Load.apply: config.delegates took 42.7805ms
+[debug]       Load.apply: Def.make(settings)... took 658.6587ms
+[debug]       Load.apply: structureIndex took 58.8382ms
+[debug]       Load.apply: mkStreams took 0.0029ms
+[info] loading project definition from C:\Users\Salim\Documents\crdt\CRDT-Test-master\project
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[debug]     Load.loadUnit: plugins took 14134.2452ms
+[debug]     Load.loadUnit: defsScala took 0.0056ms
+[debug] [Loading] Scanning directory C:\Users\Salim\Documents\crdt\CRDT-Test-master
+[debug]       Load.loadUnit: mkEval took 0.5818ms
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\Salim\Documents\crdt\CRDT-Test-master, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.StructurePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.IdeaShellPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(org.jetbrains.sbt.StructurePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(org.jetbrains.sbt.IdeaShellPlugin)))
+[debug] Clause(And(Set(Atom(sbt.plugins.CorePlugin), Atom(sbt.plugins.JvmPlugin))),Set(Atom(org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.SemanticdbPlugin,org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin,sbt.plugins.JUnitXmlReportPlugin,org.jetbrains.sbt.IdeaShellPlugin,org.jetbrains.sbt.StructurePlugin,sbt.plugins.MiniDependencyTreePlugin)
+[debug] Plugins.deducer#function took 9.3555 ms
+[info] loading settings for project crdt-test-master from build.sbt ...
+[debug]         Load.resolveProject(crdt-test-master) took 142.6453ms
+[debug]       Load.loadTransitive: finalizeProject(Project(id crdt-test-master, base: C:\Users\Salim\Documents\crdt\CRDT-Test-master, plugins: List(<none>))) took 153.8206ms
+[debug] [Loading] Done in C:\Users\Salim\Documents\crdt\CRDT-Test-master, returning: (crdt-test-master)
+[debug]     Load.loadUnit: loadedProjectsRaw took 12422.178ms
+[debug]     Load.loadUnit: cleanEvalClasses took 159.6889ms
+[debug]   Load.loadUnit(file:/C:/Users/Salim/Documents/crdt/CRDT-Test-master/, ...) took 26718.4826ms
+[debug] Load.apply: load took 26742.7603ms
+[debug] Load.apply: resolveProjects took 0.963ms
+[debug] Load.apply: finalTransforms took 113.1448ms
+[debug] Load.apply: config.delegates took 0.4249ms
+[debug] Load.apply: Def.make(settings)... took 511.7728ms
+[debug] Load.apply: structureIndex took 33.916ms
+[debug] Load.apply: mkStreams took 0.0034ms
+[info] set current project to crdt-test-master (in build file:/C:/Users/Salim/Documents/crdt/CRDT-Test-master/)
+[debug] > Exec(sbtPopOnFailure, None, None)
+[debug] > Exec(resumeFromFailure, None, None)
+[debug] > Exec(notifyUsersAboutShell, None, None)
+[debug] > Exec(iflast shell, None, None)
+[debug] > Exec(; set ideaPort in Global := 51143 ; idea-shell, None, None)
+[debug] > Exec(set ideaPort in Global := 51143, None, None)
+[info] Defining Global / ideaPort
+[info] The new value will be used by Compile / compile, Test / compile
+[debug] Defining 
+[debug] 	Global / ideaPort
+[debug] 
+[debug] The new value will be used by 
+[debug] 	Compile / compile
+[debug] 	Test / compile
+[info] Reapplying settings...
+[info] set current project to crdt-test-master (in build file:/C:/Users/Salim/Documents/crdt/CRDT-Test-master/)
+[debug] > Exec(idea-shell, None, None)
