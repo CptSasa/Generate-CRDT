@@ -5,20 +5,23 @@ import kofre.datatypes.AddWinsSet
 import kofre.syntax.ReplicaId
 import kofre.base.Uid.asId
 import kofre.dotted.Dotted
-import org.scalacheck.Gen
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop.forAll
 
 import java.util
 import scala.collection.mutable.ListBuffer
 
-trait Operation {
+
+/*trait Operation {
   var operationName: operation
   //def functionToCall : Calender=>Calender
   var value: Any
 }
+*/
   enum operation{
     case Add,Remove, Merge,UnKnownFunction
   }
+
 
 class op {
   //Operationname Name of the Operation
@@ -27,72 +30,140 @@ class op {
   var functionToCall = (calender: Calender) => calender
   //Value of the function
   var value: Any = 0
-  override def toString = ""+ operationName + " " + value
+  override def toString = ""+ operationName + " " + value //+ "\n"
   def prettyPrint = "" + operationName + ": "+ value+ "-> "
 }
-
 
 case class Calender(calList: Dotted[AddWinsSet[Int]])  {
 
   def sum(): Int = {
     calList.elements.sum
   }
+  def generateChoiceWithFrequency(depth : Int): Int ={
+    val weightedChoices: Gen[Int]= Gen.frequency(
+      (5, 0),
+      (1, 1),
+      (depth, 2) //default == 3 -> jede Operation hat die gleiche Wahrscheinlichkeit ausgeführt zu werden
+    )
+    weightedChoices.sample.get
+  }
+  def returnFittingOp(num: Int,depth: Int): op= {
+    val func = new op
+    val generatedValue = Gen.choose(0, 20).sample.get
+    if(num == 0){
+      val func = new op
+      func.value = generatedValue
+      def convertedAddCal(calender: Calender) = addCal(calender, func.value.asInstanceOf[Int])
+      func.functionToCall = convertedAddCal(_)
+      func.operationName = operation.Add
+      return func
+    }
+    if (num == 1) {
+      val func = new op
+      func.value = generatedValue
+      def convertRemoveCal(calender: Calender) = removeCal(calender, func.value.asInstanceOf[Int])
+      func.functionToCall = convertRemoveCal(_)
+      func.operationName = operation.Remove
+      return func
+    }
+    if (num == 2) {
+      val func = new op
+      func.value = generateTrace(depth)
+      def convertMergeCal(calender: Calender) = mergeCal(calender, generateViaTrace(func.value.asInstanceOf[List[op]]))
+      func.functionToCall = convertMergeCal(_)
+      func.operationName = operation.Merge
+      return func
+    }
+    return func
+
+  }
+  def generateOp(depth : Int) : Gen[op] = {
+    val chooseOp : Gen[op] = Gen.frequency(
+      (5, returnFittingOp(0,depth)),
+      (5, returnFittingOp(1,depth)),
+      (depth, returnFittingOp(2,depth)))
+    return chooseOp
+  }
   //generates a op which contains a function with generated parameters
-  def generateOperation: op = {
+  def generateOperation(depth : Int): op = {
     //eventuell statt List[Calender=>Calender],Trait und später den trait rausfinden = Funktion als invalid anzeigen
     val generatedValue = generateSizedInt().sample.get
     val func = new op
-    func.value = generatedValue
 
-    def convertedAddCal(calender: Calender) = addCal(calender, generatedValue)
-    def convertRemoveCal(calender: Calender) = removeCal(calender, generatedValue)
-    def mergeCalender(calender: Calender) = mergeCal(calender,generateViaTrace(List(generateOperation)));
     //choose which function is getting called based on the chosen Number
-    val chosenFunction = Gen.choose(0, 1).sample.get
+
+    val chosenFunction = generateChoiceWithFrequency(depth)
+    func.value = chosenFunction match {
+      case (0) => generatedValue
+      case (1) => generatedValue
+      case (2) => generateTrace(depth-1)//generateOperation(depth-1)
+    }
+
+    def convertedAddCal(calender: Calender) = addCal(calender, func.value.asInstanceOf[Int])
+    def convertRemoveCal(calender: Calender) = removeCal(calender, func.value.asInstanceOf[Int])
+    def mergeCalender(calender: Calender) = mergeCal(calender,generateViaTrace(func.value.asInstanceOf[List[op]]))
+
     func.functionToCall = chosenFunction match {
       case (0) => convertedAddCal(_)
       case (1) => convertRemoveCal(_)
-      case (0) => mergeCalender(_)
+      case (2) => mergeCalender(_)
       case (_) => null
     }
     //function Name based on the chosen number
     func.operationName = chosenFunction match {
       case (0) => operation.Add
       case (1) => operation.Remove
+      case (2) => operation.Merge
       case (_) => operation.UnKnownFunction
     }
+
     return func
   }
   //returns a generated Calender with a Trace that contains every operation whicch has been called on that Calender
   def generateCalenderWithTrace(): (Calender,List[op]) = {
     var cal = Calender(Dotted.empty)
     var trace = ListBuffer[op]()
-    for (n <- 0 until Gen.choose(0,15).sample.get){
-      var op = generateOperation
+    for (n <- 0 until Gen.choose(0,2).sample.get){
+      var op = generateOperation(Gen.choose(0,5).sample.get)
       trace.addOne(op)
-      cal = generateOperation.functionToCall(cal)
+      cal = generateOperation(Gen.choose(0,5).sample.get).functionToCall(cal)
     }
     return (cal,trace.toList)
   }
 
   def generateViaTrace(trace: List[op]): Calender = {
-    var cal = Calender(Dotted.empty)
+    var generatedCalender = Calender(Dotted.empty)
     for (n <- trace) {
-      cal = n.functionToCall(cal)
+      if(n.operationName == operation.Merge){
+        //System.out.println(generateViaTrace(n.value.asInstanceOf[List[op]]).toString() + " + " + generatedCalender.toString)
+        generatedCalender = mergeCal(generatedCalender,generateViaTrace(n.value.asInstanceOf[List[op]]))
+        //System.out.println(generatedCalender)
+      }
+      else {
+        generatedCalender = n.functionToCall(generatedCalender)
+      }
     }
-    return cal
+    return generatedCalender
   }
 
-  def generateTrace(): (List[op]) = {
-    var cal = Calender(Dotted.empty)
+  def generateTrace(depth : Int): (List[op]) = {
     var trace = ListBuffer[op]()
-    for (n <- 0 until Gen.choose(0, 15).sample.get) {
-      var op = generateOperation
+    for (n <- 0 until Gen.choose(depth,depth+3).sample.get) {
+      var op = generateOperation(depth)
       trace.addOne(op)
-      cal = generateOperation.functionToCall(cal)
     }
     return trace.toList
   }
+  def generateGenerator(): Gen[Calender]={
+    val customGenerator : Gen[Calender] = generateViaTrace(generateTrace(5))
+    return customGenerator
+  }
+
+  def generateTraceGenerator(): Gen[List[op]] = {
+    val customGenerator: Gen[List[op]] = generateTrace(2)
+    return customGenerator
+  }
+
 
   def mergeTraces(listA: Set[op], listB: Set[op]): Set[op] ={
     var mergedTrace = listA
@@ -130,8 +201,7 @@ case class Calender(calList: Dotted[AddWinsSet[Int]])  {
   }
 
   def mergeCal(calender: Calender, calender2: Calender): Calender = {
-    val a = calender.calList merge calender2.calList
-    return Calender(a)
+    Calender(calender.calList merge calender2.calList)
   }
 
   def generateSizedInt(): Gen[Int] = {
