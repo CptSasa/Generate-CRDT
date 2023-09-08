@@ -32,6 +32,19 @@ class op {
   var value: Any = 0
   override def toString = ""+ operationName + " " + value //+ "\n"
   def prettyPrint = "" + operationName + ": "+ value+ "-> "
+
+  def printSubOp(toPrint: op): String = {
+    if (toPrint.operationName == operation.Merge){
+      var sub=  "" + operationName+ " " + "\n"+ " "
+      for(n<- toPrint.value.asInstanceOf[List[op]]){
+        sub = sub.++(printSubOp(n))
+      }
+      return sub
+    }
+    else{
+      return ""+ operationName + " " + value + "\n"
+    }
+  }
 }
 
 case class Calender(calList: Dotted[AddWinsSet[Int]])  {
@@ -135,11 +148,12 @@ case class Calender(calList: Dotted[AddWinsSet[Int]])  {
     var generatedCalender = Calender(Dotted.empty)
     for (n <- trace) {
       if(n.operationName == operation.Merge){
-        //System.out.println(generateViaTrace(n.value.asInstanceOf[List[op]]).toString() + " + " + generatedCalender.toString)
         generatedCalender = mergeCal(generatedCalender,generateViaTrace(n.value.asInstanceOf[List[op]]))
-        //System.out.println(generatedCalender)
       }
       else {
+        if(n.operationName == operation.Add){
+          generatedCalender = addCal(generatedCalender,n.value.asInstanceOf[Int])
+        }
         generatedCalender = n.functionToCall(generatedCalender)
       }
     }
@@ -201,7 +215,7 @@ case class Calender(calList: Dotted[AddWinsSet[Int]])  {
   }
 
   def mergeCal(calender: Calender, calender2: Calender): Calender = {
-    Calender(calender.calList merge calender2.calList)
+    return Calender(calender.calList merge calender2.calList)
   }
 
   def generateSizedInt(): Gen[Int] = {
@@ -210,7 +224,7 @@ case class Calender(calList: Dotted[AddWinsSet[Int]])  {
   }
   def functionList(): List[(Calender, Int) => Calender] = List(removeCal(_,_),addCal(_,_),addRemainingDays(_,_))
 
-  def holdsRestriction(): Boolean = sum()<=30
+  def holdsRestriction(): Boolean = sum()<30
   /*
   def generateProperty(): Property={
     val validTrace = forAll(calender.generateTrace(), calender.generateTrace()) { (x: (List[op]), y: (List[op])) =>

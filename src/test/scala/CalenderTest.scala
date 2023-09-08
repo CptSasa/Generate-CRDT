@@ -8,6 +8,7 @@ import org.scalacheck.Prop.forAll
 import org.scalacheck.{Arbitrary, Gen, Properties, Shrink}
 
 import scala.collection.immutable.List
+import scala.language.postfixOps
 import scala.util.Properties
 
 class CalenderTest {}
@@ -23,6 +24,14 @@ object CalenderSpecification extends Properties("Calender") {
     tmp.holdsRestriction() && tmp.sum()<=30
   }
 */
+  object OperationShrinker{
+    def customOperationShrinker: Shrink[op] = Shrink { operationToReduce =>
+      if(operationToReduce.value == operation.Merge){
+        operationToReduce.value = operationToReduce.value.asInstanceOf[List[op]].filter(_.operationName != operation.Remove)
+      }
+      Stream(operationToReduce)
+    }
+  }
  object TraceShrinker {
     def customShrinker: Shrink[List[op]] = Shrink { operationToReduce =>
       var filteredList = operationToReduce.filter(_.operationName != operation.Remove)
@@ -43,20 +52,30 @@ object CalenderSpecification extends Properties("Calender") {
       var operationToReduce = toReduce
       for (n <- operationToReduce) {
         if (calender.generateViaTrace(operationToReduce).sum() > 30) {
-          if (calender.generateViaTrace(operationToReduce.filter(_.value != n.value)).sum() > 30) {
-            operationToReduce = operationToReduce.filter(_.value != n.value)
+          if (calender.generateViaTrace(operationToReduce.filter(_ != n)).sum() > 30) {
+            operationToReduce = operationToReduce.filter(_ != n)
           }
         }
       }
-        var counter = operationToReduce.size
-        while(counter>0) {
+      /*
+      for(n <- operationToReduce){
+        var counter = 0
+        while(counter<operationToReduce.size) {
           if(calender.generateViaTrace(operationToReduce).sum() > 30){
-             if(calender.generateViaTrace(operationToReduce.filter(_.value == operationToReduce(counter-1).value)).sum()>30){
-               operationToReduce = operationToReduce.filter(_.value == operationToReduce(counter-1).value)
+             if(n.operationName ==operation.Merge){
+               if(calender.mergeCal(calender.generateViaTrace(operationToReduce.filter(_ != n)),calender.generateViaTrace(n.value.asInstanceOf[List[op]].filter(_ != n.value.asInstanceOf[List[op]](counter)))).holdsRestriction()){
+                 val newOp = new op
+                 newOp.value = n.value.asInstanceOf[List[op]].filter(_ != n.value.asInstanceOf[List[op]](counter))
+                 newOp.operationName = operation.Merge
+                 def mergeCalender(calender: Calender) = calender.mergeCal(calender,calender.generateViaTrace(newOp.value.asInstanceOf[List[op]]))
+                 newOp.functionToCall= mergeCalender(_)
+                 operationToReduce = operationToReduce.updated(operationToReduce.indexOf(n),newOp)
+               }
              }
         }
-          counter = counter-1
+          counter = counter+1
       }
+      }*/
       Stream(operationToReduce)
       //Shrink.shrink(filteredList)
     }
@@ -101,8 +120,12 @@ object CalenderSpecification extends Properties("Calender") {
 
 
   implicit val traceShrink: Shrink[List[op]] = Shrink { trace =>
-    TraceShrinker.customShrinker.shrink(trace)
+    TraceShrinker.minimizingShrinker.shrink(trace)
   }
+
+//  implicit val operationShrinker: Shrink[op] = Shrink { operate =>
+//    OperationShrinker.customOperationShrinker.shrink(operate)
+//  }
 
 
 /*
@@ -110,12 +133,21 @@ object CalenderSpecification extends Properties("Calender") {
       TraceShrinker.calenderShrinker.shrink(calender)
     }
 */
-    val validTrace = forAll(calender.generateTrace(4), calender.generateTrace(4)) { (x: (List[op]), y: (List[op])) =>
+    val validTrace = forAll(calender.generateTrace(2), calender.generateTrace(2)) { (x: (List[op]), y: (List[op])) =>
       val x2 = calender.generateViaTrace(x)
+      //System.out.println(x2.sum())
       val y2 = calender.generateViaTrace(y)
       val tmp = x2.mergeCal(x2, y2)
       tmp.holdsRestriction() && tmp.sum() <= 30
     }
+
+  val validList = forAll(calender.generateTrace(2), calender.generateTrace(2)) { (x: (List[op]), y: (List[op])) =>
+    val x2 = calender.generateViaTrace(x)
+    //System.out.println(x2.sum())
+    val y2 = calender.generateViaTrace(y)
+    val tmp = x2.mergeCal(x2, y2)
+    x2.holdsRestriction() && x2.sum() <= 30
+  }
     val holdsResWithList = forAll(calender.generateCalenderWithTrace(), calender.generateCalenderWithTrace()) { (x: (Calender, List[op]), y: (Calender, List[op])) =>
       var tmp = x._1
       tmp = tmp.mergeCal(x._1, y._1)
@@ -163,6 +195,7 @@ object CalenderSpecification extends Properties("Calender") {
     generateCalenderWithArbitrary.check
 */
     validTrace.check()
+    validList.check()
     traceOfOneCal.check()
     property("holdsResWork") = validTrace
     property("generateOneCal") = traceOfOneCal
