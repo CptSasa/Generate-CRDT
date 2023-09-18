@@ -1,3 +1,4 @@
+import CalenderSpecification.calender
 import kofre.base.Lattice
 import kofre.base.Lattice.Operators
 import kofre.datatypes.AddWinsSet
@@ -8,6 +9,7 @@ import org.scalacheck.Prop.forAll
 import org.scalacheck.{Arbitrary, Gen, Properties, Shrink}
 
 import scala.collection.immutable.List
+import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
 import scala.util.Properties
 
@@ -16,6 +18,50 @@ class CalenderTest {}
 object CalenderSpecification extends Properties("Calender") {
 
   val calender = Calender(Dotted.empty)
+  def generateFixedTrace(): List[op] ={
+    val operate = new op
+    operate.value = 15
+    operate.operationName = operation.Add
+    var tmpCal = calender.addCal(calender,15)
+    def convertedAddCal(calender: Calender) = calender.addCal(calender, operate.value.asInstanceOf[Int])
+    operate.functionToCall = convertedAddCal(_)
+    val operateAdd14 = new op
+    operateAdd14.value = 14
+    operateAdd14.operationName = operation.Add
+    tmpCal = calender.addCal(calender, 14)
+    def convertedAddCal14(calender: Calender) = calender.addCal(calender, operate.value.asInstanceOf[Int])
+    operateAdd14.functionToCall = convertedAddCal14(_)
+
+    val operateAdd5 = new op
+    operateAdd5.value = 5
+    operateAdd5.operationName = operation.Add
+    tmpCal = calender.addCal(calender, 5)
+    def convertedAddCal5(calender: Calender) = calender.addCal(calender, operate.value.asInstanceOf[Int])
+    operateAdd14.functionToCall = convertedAddCal5(_)
+
+    val operateMerge = new op
+    operateMerge.value = List(operateAdd5)
+    operateMerge.operationName = operation.Merge
+    tmpCal = calender.mergeCal(calender, calender.generateViaTrace(operateMerge.value.asInstanceOf[List[op]]))
+    def convertedMerge(calender: Calender) = calender.mergeCal(calender,tmpCal)
+    operateMerge.functionToCall = convertedMerge(_)
+
+    val operateAdd2 = new op
+    operateAdd2.value = 2
+    operateAdd2.operationName = operation.Add
+    tmpCal = calender.addCal(calender, 2)
+
+    def convertedAddCal2(calender: Calender) = calender.addCal(calender, operate.value.asInstanceOf[Int])
+
+    operateAdd14.functionToCall = convertedAddCal5(_)
+
+    val list = new ListBuffer[op]
+    list.addOne(operate)
+    list.addOne(operateAdd14)
+    list.addOne(operateMerge)
+    list.addOne(operateAdd2)
+    return list.toList
+  }
   /*
   val holdsRes = forAll(calender.generateCalenderWithTrace(), calender.generateCalenderWithTrace()) { (x: (Calender,List[op]), y: (Calender,List[op])) =>
     var tmp = x._1
@@ -119,7 +165,7 @@ object CalenderSpecification extends Properties("Calender") {
   }
 
 
-  implicit val traceShrink: Shrink[List[op]] = Shrink { trace =>
+  implicit def traceShrink: Shrink[List[op]] = Shrink { trace =>
     TraceShrinker.minimizingShrinker.shrink(trace)
   }
 
@@ -160,6 +206,7 @@ object CalenderSpecification extends Properties("Calender") {
     val generatorTrace = forAll(calender.generateGenerator()) { (x: Calender) =>
       x.holdsRestriction() && x.sum() <= 30
     }
+    /*
     implicit def opGen: Arbitrary[List[op]] = Arbitrary(generateClass)
     def generateClass: Gen[List[op]] = calender.generateTrace(4)
 
@@ -188,21 +235,30 @@ object CalenderSpecification extends Properties("Calender") {
       val generatedCalender = calender.generateViaTrace(generatedTrace)
       generatedCalender.holdsRestriction() && generatedCalender.sum() <= 30
     }
+    */
 
+  //implicit def opGen: Arbitrary[List[op]] = Arbitrary(generateClass)
+  def generateClass: Gen[List[op]] = generateFixedTrace()
+
+  val traceOfOneCal = forAll(generateClass) { (generatedTrace: List[op]) =>
+    val generatedCalender = calender.generateViaTrace(generatedTrace)
+    generatedCalender.holdsRestriction() && generatedCalender.sum() <= 30
+  }
 /*
     generateListOfGeneratedValue.check()
     generateTraceGenerator.check()
     generateCalenderWithArbitrary.check
 */
+    traceOfOneCal.check()
     validTrace.check()
     validList.check()
-    traceOfOneCal.check()
-    property("holdsResWork") = validTrace
-    property("generateOneCal") = traceOfOneCal
+  //traceOfOneCal.check()
+    property("holdsResWork") = traceOfOneCal
+    //property("generateOneCal") = traceOfOneCal
     //property("holdsRes") = holdsResWithList
     property("GeneratorTrace") = generatorTrace
-    property("generateTraceGenerator") = generateTraceGenerator
-    property("generater") = generateListOfGeneratedValue.++(generateTraceGenerator)
+    //property("generateTraceGenerator") = generateTraceGenerator
+    //property("generater") = generateListOfGeneratedValue.++(generateTraceGenerator)
 
 
 

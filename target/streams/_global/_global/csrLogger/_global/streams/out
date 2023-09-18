@@ -1,4 +1,12 @@
-[debug] downloaded https://repo1.maven.org/maven2/org/scalactic/scalactic_3/3.2.16/scalactic_3-3.2.16.pom
-[debug] downloaded https://repo1.maven.org/maven2/org/scalactic/scalactic_3/3.2.16/scalactic_3-3.2.16.jar
-[debug] downloaded https://repo1.maven.org/maven2/org/scalactic/scalactic_3/3.2.16/scalactic_3-3.2.16-sources.jar
-[debug] downloaded https://repo1.maven.org/maven2/org/scalactic/scalactic_3/3.2.16/scalactic_3-3.2.16-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/pprint_3/0.8.1/pprint_3-0.8.1.pom
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/fansi_3/0.4.0/fansi_3-0.4.0.pom
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/sourcecode_3/0.3.0/sourcecode_3-0.3.0.pom
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/sourcecode_3/0.3.0/sourcecode_3-0.3.0.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/fansi_3/0.4.0/fansi_3-0.4.0.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/pprint_3/0.8.1/pprint_3-0.8.1.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/fansi_3/0.4.0/fansi_3-0.4.0-sources.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/pprint_3/0.8.1/pprint_3-0.8.1-sources.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/sourcecode_3/0.3.0/sourcecode_3-0.3.0-sources.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/pprint_3/0.8.1/pprint_3-0.8.1-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/sourcecode_3/0.3.0/sourcecode_3-0.3.0-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/lihaoyi/fansi_3/0.4.0/fansi_3-0.4.0-javadoc.jar
