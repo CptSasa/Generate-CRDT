@@ -53,9 +53,9 @@ case class Calendar (calendarList: Dotted[AddWinsSet[Int]]) {
     val cal = calendar.copy()
     var tmp = cal.calendarList
     if (calendar.sum() + value <= 30) {
-      tmp = cal.calendarList.add(using ("" + System.currentTimeMillis()).asId)(value)
+      return Calendar(cal.calendarList.add(using ("" + System.currentTimeMillis()).asId)(value))
     }
-    return Calendar(tmp)
+    return Calendar(cal.calendarList)
 
   }
 
