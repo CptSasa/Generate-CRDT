@@ -67,7 +67,7 @@ case class Calendar (calendarList: Dotted[AddWinsSet[Int]]) {
   }
 
   def mergeCalendar(calendar: Calendar, calendar2: Calendar): Calendar = {
-    System.out.println(calendar.sum() + " + " + calendar2.sum())
+    System.out.println(calendar.sum() + " Merge "  + calendar2.sum())
     return Calendar(calendar.calendarList merge calendar2.calendarList)
   }
 

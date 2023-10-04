@@ -94,11 +94,11 @@ def testConstructCalender(): List[CalOp] = {
 object Hello {
   def main(args: Array[String]) = {
 //   val testList = List(MergeOp(List(RemoveOp(27), AddOp(15), RemoveOp(20))), RemoveOp(9), MergeOp(List(RemoveOp(28), RemoveOp(28), RemoveOp(7), RemoveOp(14), RemoveOp(11))), AddOp(16), RemoveOp(19), MergeOp(List(AddOp(8), AddOp(9), AddOp(12), MergeOp(List(AddOp(19), RemoveOp(26))), MergeOp(List(AddOp(7), RemoveOp(16), AddOp(26))), RemoveOp(25))), MergeOp(List(AddOp(23), RemoveOp(17), MergeOp(List(RemoveOp(22), AddOp(17), RemoveOp(3), RemoveOp(21))), RemoveOp(29), AddOp(18))), RemoveOp(11))
-    val testList = List(AddOp(16), MergeOp(List(AddOp(25), AddOp(3), AddOp(26), MergeOp(List(AddOp(6))), AddOp(15), MergeOp(List(MergeOp(List(AddOp(15), AddOp(7), AddOp(11), AddOp(24))), MergeOp(List(AddOp(7), AddOp(25), AddOp(19), AddOp(22))), AddOp(28), AddOp(12))), AddOp(28))))
+    val testList = List(AddOp(16), MergeOp(List(AddOp(25), AddOp(3), AddOp(26), MergeOp(List(AddOp(6))), AddOp(15), MergeOp(List(MergeOp(List(AddOp(15), AddOp(7), AddOp(11), AddOp(24))))))))//, MergeOp(List(AddOp(7), AddOp(25), AddOp(19), AddOp(22))), AddOp(28), AddOp(12))), AddOp(28))))
     val cal = Calendar(Dotted.empty)
     val newCalendar = cal.constructCalendar(cal,testList)
     System.out.println(newCalendar.sum())
-    System.out.println(newCalendar.calendarList)
+    //System.out.println(newCalendar.calendarList)
   }
 }
 
