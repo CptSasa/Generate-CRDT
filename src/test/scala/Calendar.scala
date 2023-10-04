@@ -19,7 +19,7 @@ case class Calendar (calendarList: Dotted[AddWinsSet[Int]]) {
   def sum(): Int = {
     calendarList.elements.sum
   }
-
+//constructs a calender with a given calender and a trace that contains operations which need to be called opon the Calendar
   def constructCalendar(current: Calendar, remainingTrace: List[CalOp]) : Calendar = {
 
     if(remainingTrace.nonEmpty){
@@ -49,6 +49,7 @@ case class Calendar (calendarList: Dotted[AddWinsSet[Int]]) {
     return list.toList
 }
   def addCal(calendar: Calendar, value: Int): Calendar = {
+    System.out.println(calendar.sum() + " : "+ value+ " Add")
     val cal = calendar.copy()
     var tmp = cal.calendarList
     if (calendar.sum() + value <= 30) {
@@ -59,19 +60,21 @@ case class Calendar (calendarList: Dotted[AddWinsSet[Int]]) {
   }
 
   def removeCalendar(calendar: Calendar, value: Int): Calendar = {
+    System.out.println(calendar.sum() + " : "+ value+ " Remove")
     val cal = calendar.copy()
     val tmp = cal.calendarList.remove(value)
     return Calendar(tmp)
   }
 
   def mergeCalendar(calendar: Calendar, calendar2: Calendar): Calendar = {
+    System.out.println(calendar.sum() + " + " + calendar2.sum())
     return Calendar(calendar.calendarList merge calendar2.calendarList)
   }
 
   def generateChoiceWithFrequency(depth: Int): Int = {
     val weightedChoices: Gen[Int] = Gen.frequency(
       (3, 0),
-      (3, 1),
+      (0, 1),
       (depth, 2) //default == 3 -> jede Operation hat die gleiche Wahrscheinlichkeit ausgeführt zu werden
     )
     weightedChoices.sample.get

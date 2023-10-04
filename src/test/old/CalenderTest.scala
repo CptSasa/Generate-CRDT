@@ -15,6 +15,66 @@
 //
 class CalenderTest {}
 //
+//def shrinkMergeOp(mergeOp: MergeOp): MergeOp = {
+//  return MergeOp(mergeOp.other.tail)
+//}
+////    def generateMergeOpWithout(mergeOp: MergeOp): List[CalOp] ={
+////      mergeOp.other.map(o => mergeOp.diff(List[o]))
+////    }
+//def shrinkCalOp(operation: CalOp): CalOp = {
+//  case MergeOp(other) => shrinkMergeOp(MergeOp(other))
+//}f listAllPossibleOptions(list: List[CalOp]): List[List[CalOp]] = {
+//  System.out.println("using this")
+//  val possibleStates = new ListBuffer[List[CalOp]]
+//  for (n <- list) {
+//    n match
+//      case AddOp
+////de(num) => possibleStates.addOne(list.diff(List(n)))
+//      case RemoveOp(num) => possibleStates.addOne(list.diff(List(n)))
+//      case MergeOp(other) => {
+//        possibleStates.addOne(list.diff(List(n)))
+//        for (x <- listAllPossibleOptions(other)) {
+//          if (x.size > 0) {
+//            possibleStates.addOne(list.diff(List(n)).appended(MergeOp(x)))
+//          }
+//        }
+//      }
+//  }
+//  for (n <- possibleStates) {
+//    val x = listAllPossibleOptions(n)
+//    for (toAdd <- x) {
+//      possibleStates.addOne(toAdd)
+//    }
+//  }
+//  possibleStates.toList
+//
+//}  operation match
+//    case AddOp(num) => operation
+//    case RemoveOp(num) => operation
+// 
+//implicit def minimizingShrinker: Shrink[List[CalOp]] = Shrink { trace =>
+//  val shrunk = traceShrink.shrink(trace)
+//  println("hi from shrinker!")
+//  shrunk.toStream.map(o => mapThroughList(o))
+//}
+//
+//def mapThroughList(list: List[CalOp]): List[CalOp] = {
+//  list.map(o => shrinkCalOp(o))
+//}
+//def shrinkCalOp(operation: CalOp): CalOp = {
+//  operation match
+//    case AddOp(num) => operation
+//    case RemoveOp(num) => operation
+//    case MergeOp(other) => MergeOp(removeRandomElement(other))
+//}
+//def removeRandomElement(list: List[CalOp]): List[CalOp] = {
+//  if (list.size > 1) {
+//    val random = Gen.choose(0, list.size - 1).sample.get
+//    list.diff(List(list(random)))
+//  }
+//  List()
+//}
+//
 //object CalenderSpecification extends Properties("Calender") {
 //
 //  val calender = Calender(Dotted.empty)
