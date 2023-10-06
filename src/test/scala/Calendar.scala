@@ -14,7 +14,7 @@ case class AddOp(num: Int) extends CalOp
 case class RemoveOp(num: Int) extends CalOp
 case class MergeOp(other: List[CalOp]) extends CalOp
 
-case class Calendar (calendarList: Dotted[AddWinsSet[Int]]) {
+case class Calendar (calendarList: Dotted[AddWinsSet[Int]],replicaID : String) {
 
   def sum(): Int = {
     calendarList.elements.sum
@@ -26,7 +26,7 @@ case class Calendar (calendarList: Dotted[AddWinsSet[Int]]) {
     return remainingTrace.head match
       case AddOp(num) => constructCalendar(current.addCal(current,num), remainingTrace.tail)
       case RemoveOp(num)=> constructCalendar(current.removeCalendar(current,num),remainingTrace.tail)
-      case MergeOp(other)=> constructCalendar(current.mergeCalendar(current,constructCalendar(Calendar(Dotted.empty),other)),remainingTrace.tail)
+      case MergeOp(other)=> constructCalendar(current.mergeCalendar(current,constructCalendar(Calendar(Dotted.empty,(""+ System.currentTimeMillis())),other)),remainingTrace.tail)
   }
     else{
     return current
@@ -49,32 +49,32 @@ case class Calendar (calendarList: Dotted[AddWinsSet[Int]]) {
     return list.toList
 }
   def addCal(calendar: Calendar, value: Int): Calendar = {
-    System.out.println(calendar.sum() + " : "+ value+ " Add")
+    //System.out.println(calendar.sum() + " : "+ value+ " Add")
     val cal = calendar.copy()
-    var tmp = cal.calendarList
+    //var tmp = cal.calendarList
     if (calendar.sum() + value <= 30) {
-      return Calendar(cal.calendarList.add(using ("" + System.currentTimeMillis()).asId)(value))
+      return Calendar(cal.calendarList.add(using (cal.replicaID).asId)(value),calendar.replicaID)
     }
-    return Calendar(cal.calendarList)
+    return cal
 
   }
 
   def removeCalendar(calendar: Calendar, value: Int): Calendar = {
-    System.out.println(calendar.sum() + " : "+ value+ " Remove")
+    //System.out.println(calendar.sum() + " : "+ value+ " Remove")
     val cal = calendar.copy()
     val tmp = cal.calendarList.remove(value)
-    return Calendar(tmp)
+    return Calendar(tmp,cal.replicaID)
   }
 
   def mergeCalendar(calendar: Calendar, calendar2: Calendar): Calendar = {
-    System.out.println(calendar.sum() + " Merge "  + calendar2.sum())
-    return Calendar(calendar.calendarList merge calendar2.calendarList)
+    //System.out.println(calendar.sum() + " Merge "  + calendar2.sum())
+    return Calendar(calendar.calendarList merge calendar2.calendarList,(""+ System.currentTimeMillis()))
   }
 
   def generateChoiceWithFrequency(depth: Int): Int = {
     val weightedChoices: Gen[Int] = Gen.frequency(
-      (3, 0),
-      (0, 1),
+      (5, 0),
+      (5, 1),
       (depth, 2) //default == 3 -> jede Operation hat die gleiche Wahrscheinlichkeit ausgeführt zu werden
     )
     weightedChoices.sample.get
