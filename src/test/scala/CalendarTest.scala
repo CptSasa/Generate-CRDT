@@ -20,7 +20,7 @@ class CalendarTest {}
 
     implicit def traceShrink: Shrink[List[CalOp]] = Shrink { trace =>
       val possiblestates = listAllPossibleOptions(trace)
-      println("hi from shrinker!")
+      //println("hi from shrinker!")
       possiblestates.toStream//.filter(x => calendar.constructCalendar(Calendar(Dotted.empty,UUID.randomUUID().toString), x).sum()> 30)
     }
 
@@ -51,7 +51,7 @@ class CalendarTest {}
     val traceOfOneCalFixed = forAll(opGenerator.arbitrary) { (generatedTrace: List[CalOp]) =>
       val generatedCalender = calendar.constructCalendar(Calendar(Dotted.empty,UUID.randomUUID().toString), generatedTrace)
       //            System.out.println(generatedTrace)
-                  System.out.println(generatedCalender.sum())
+//                  System.out.println(generatedCalender.sum())
       generatedCalender.sum() <= 30
     }
 
