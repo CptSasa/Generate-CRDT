@@ -21,11 +21,10 @@ class CalendarTest {}
     implicit def traceShrink: Shrink[List[CalOp]] = Shrink { trace =>
       val possiblestates = listAllPossibleOptions(trace)
       println("hi from shrinker!")
-      possiblestates.toStream.filter(x => calendar.constructCalendar(Calendar(Dotted.empty,UUID.randomUUID().toString), x).sum()> 30)
+      possiblestates.toStream//.filter(x => calendar.constructCalendar(Calendar(Dotted.empty,UUID.randomUUID().toString), x).sum()> 30)
     }
 
     def listAllPossibleOptions(list: List[CalOp]): List[List[CalOp]] = {
-      //System.out.println("using this")
       val possibleStates = new ListBuffer[List[CalOp]]
       for (n <- list) {
         n match
@@ -41,11 +40,8 @@ class CalendarTest {}
               }
             }
           }
-        //System.out.println("Possible State :" + possibleStates)
-
       }
       possibleStates.toList
-      //List.concat(possibleStates.toList,listAllPossibleOptions(possibleStates.toList.head))
     }
 
     def generateClass: Gen[List[CalOp]] = calendar.generateListOfOp(5)
@@ -61,7 +57,6 @@ class CalendarTest {}
 
 
     traceOfOneCalFixed.check()
-    //fixed.check()
 
 
 }
