@@ -17,12 +17,23 @@ import scala.util.Properties
 class CalendarTest {}
   object CalendarSpecification extends Properties("Calendar") {
     val calendar = new CalendarHandler
-
-    implicit def traceShrink: Shrink[List[CalOp]] = Shrink { trace =>
-      val possiblestates = listAllPossibleOptions(trace)
-      //println("hi from shrinker!")
-      possiblestates.toStream//.filter(x => calendar.constructCalendar(Calendar(Dotted.empty,UUID.randomUUID().toString), x).sum()> 30)
+     implicit def shrinkerWithLzy: Shrink[List[CalOp]] = Shrink { trace =>
+      trace.toStream.flatMap(c => c match
+        case AddOp(num) =>{
+          Stream(trace.diff(List(c)))
+        }
+        case RemoveOp(num) => {
+          Stream(trace.diff(List(c)))
+        }
+        case MergeOp(other) =>{
+            Stream(trace.diff(List(c))).concat(shrinkerWithLzy.shrink(other).filter(_.nonEmpty).map(x => trace.diff(List(MergeOp(other))).appended(MergeOp(x))))
+        })
     }
+//    implicit def traceShrink: Shrink[List[CalOp]] = Shrink { trace =>
+//      val possiblestates = listAllPossibleOptions(trace)
+//      //println("hi from shrinker!")
+//      possiblestates.toStream //.filter(x => calendar.constructCalendar(Calendar(Dotted.empty,UUID.randomUUID().toString), x).sum()> 30)
+//    }
 
     def listAllPossibleOptions(list: List[CalOp]): List[List[CalOp]] = {
       val possibleStates = new ListBuffer[List[CalOp]]
@@ -44,7 +55,7 @@ class CalendarTest {}
       possibleStates.toList
     }
 
-    def generateClass: Gen[List[CalOp]] = calendar.generateListOfOp(5)
+    def generateClass: Gen[List[CalOp]] = calendar.generateListOfOp(9)
 
     implicit def opGenerator: Arbitrary[List[CalOp]] = Arbitrary(generateClass)
 
