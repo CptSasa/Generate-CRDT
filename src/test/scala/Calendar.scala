@@ -6,14 +6,13 @@ import kofre.base.Uid.asId
 import kofre.dotted.Dotted
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop.forAll
-
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 
-sealed trait CalOp
-case class AddOp(num: Int) extends CalOp
-case class RemoveOp(num: Int) extends CalOp
-case class MergeOp(other: List[CalOp]) extends CalOp
+sealed trait CalendarOperation
+case class Add(num: Int) extends CalendarOperation
+case class Remove(num: Int) extends CalendarOperation
+case class Merge(other: List[CalendarOperation]) extends CalendarOperation
 
 case class Calendar (calendarList: Dotted[AddWinsSet[Int]],replicaID : String) {
 
@@ -44,7 +43,7 @@ case class Calendar (calendarList: Dotted[AddWinsSet[Int]],replicaID : String) {
   def mergeCalendar(calendar2: Calendar): Calendar = {
     val cal = this.copy()
     //System.out.println(calendar.sum() + " Merge "  + calendar2.sum())
-    return Calendar(cal.calendarList merge calendar2.calendarList, UUID.randomUUID().toString)
+    return Calendar(cal.calendarList merge calendar2.calendarList, this.replicaID)
   }
 
 }
@@ -53,7 +52,7 @@ class CalendarHandler {
     val weightedChoices: Gen[Int] = Gen.frequency(
       (5, 0),
       (5, 1),
-      (depth, 2) //default ==5 -> jede Operation hat die gleiche Wahrscheinlichkeit ausgeführt zu werden
+      (depth, 2)
     )
     weightedChoices.sample.get
   }
@@ -62,13 +61,16 @@ class CalendarHandler {
     return Gen.choose(1, 29).sample.get
   }
 
-  def constructCalendar(current: Calendar, remainingTrace: List[CalOp]): Calendar = {
-
+  def constructCalendar(current: Calendar, remainingTrace: List[CalendarOperation]): Calendar = {
     if (remainingTrace.nonEmpty) {
       return remainingTrace.head match
-        case AddOp(num) => constructCalendar(current.addCal(num), remainingTrace.tail)
-        case RemoveOp(num) => constructCalendar(current.removeCalendar(num), remainingTrace.tail)
-        case MergeOp(other) => constructCalendar(current.mergeCalendar(constructCalendar(Calendar(Dotted.empty, UUID.randomUUID().toString), other)), remainingTrace.tail)
+        case Add(num) =>
+          constructCalendar(current.addCal(num), remainingTrace.tail)
+        case Remove(num) =>
+          constructCalendar(current.removeCalendar(num), remainingTrace.tail)
+        case Merge(other) =>
+          constructCalendar(current.mergeCalendar(
+            constructCalendar(Calendar(Dotted.empty, UUID.randomUUID().toString), other)), remainingTrace.tail)
     }
     else {
       return current
@@ -77,15 +79,15 @@ class CalendarHandler {
 
   //  def generateCalendar(depth: Int) : List[CalOp] = {
   //   }
-  def generateCalOp(depth: Int): CalOp = {
+  def generateCalOp(depth: Int): CalendarOperation = {
     return generateChoiceWithFrequency(depth) match
-      case 0 => AddOp(generateInt())
-      case 1 => RemoveOp(generateInt())
-      case 2 => MergeOp(generateListOfOp(depth - 1))
+      case 0 => Add(generateInt())
+      case 1 => Remove(generateInt())
+      case 2 => Merge(generateListOfOp(depth - 1))
   }
 
-  def generateListOfOp(depth: Int): List[CalOp] = {
-    val list = new ListBuffer[CalOp]
+  def generateListOfOp(depth: Int): List[CalendarOperation] = {
+    val list = new ListBuffer[CalendarOperation]
     for (n <- 0 until Gen.choose(depth, 5 + depth).sample.get) {
       list.addOne(generateCalOp(depth))
     }
