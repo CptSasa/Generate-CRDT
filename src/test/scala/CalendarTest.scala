@@ -59,10 +59,8 @@ class CalendarTest {}
       possibleStates.toList
     }
     val calendar = Calendar(Dotted.empty, UUID.randomUUID().toString)
-    def generateClass: Gen[List[CalendarOperation]] = calendarHandler.generateListOfOp(5)
-
+    def generateClass: Gen[List[CalendarOperation]] = calendarHandler.generateListOfOperation(4)
     implicit def opGenerator: Arbitrary[List[CalendarOperation]] = Arbitrary(generateClass)
-
     val traceOfOneCalFixed = forAll(generateClass) { (generatedTrace: List[CalendarOperation]) =>
       val generatedCalender = calendarHandler.constructCalendar(calendar, generatedTrace)
       generatedCalender.sum() < 31

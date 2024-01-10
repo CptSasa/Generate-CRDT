@@ -70,7 +70,7 @@ class CalendarHandler {
           constructCalendar(current.removeCalendar(num), remainingTrace.tail)
         case Merge(other) =>
           constructCalendar(current.mergeCalendar(
-            constructCalendar(Calendar(Dotted.empty, UUID.randomUUID().toString), other)), remainingTrace.tail)
+            constructCalendar(Calendar(Dotted.empty, randomId()), other)), remainingTrace.tail)
     }
     else {
       return current
@@ -79,19 +79,26 @@ class CalendarHandler {
 
   //  def generateCalendar(depth: Int) : List[CalOp] = {
   //   }
-  def generateCalOp(depth: Int): CalendarOperation = {
+  def generateCalOperation(depth: Int): CalendarOperation = {
     return generateChoiceWithFrequency(depth) match
       case 0 => Add(generateInt())
       case 1 => Remove(generateInt())
-      case 2 => Merge(generateListOfOp(depth - 1))
+      case 2 => Merge(generateListOfOperation(depth - 1))
   }
 
-  def generateListOfOp(depth: Int): List[CalendarOperation] = {
+  def generateListOfOperation(depth: Int): List[CalendarOperation] = {
     val list = new ListBuffer[CalendarOperation]
-    for (n <- 0 until Gen.choose(depth, 5 + depth).sample.get) {
-      list.addOne(generateCalOp(depth))
+    for (n <- 0 until randomNumberBetween(depth)) {
+      list.addOne(generateCalOperation(depth))
     }
     return list.toList
+  }
+
+  def randomNumberBetween(depth: Int): Int = {
+    Gen.choose(depth, 5 + depth).sample.get
+  }
+  def randomId(): String ={
+    UUID.randomUUID().toString
   }
 }
 
